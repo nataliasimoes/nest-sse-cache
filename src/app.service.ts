@@ -6,19 +6,16 @@ export interface CountMessage {
 }
 @Injectable()
 export class AppService {
-  constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache) {}
-
-  private cachedItem = interval(10000).pipe(map(num => ({ data: `numero: ${Math.floor(Math.random() * 100)}` })))
-
-  async getHello() {
-    await this.cacheManager.set('cached_item', "Teste", 10)
-    const cachedItem = await this.cacheManager.get('cached_item')
-    console.log(cachedItem)
-    return cachedItem;
+  constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache) {
+    // seta o valor do cache
+    this.cacheManager.set('cached_count', this.cachedItem)
   }
 
- async sendCount(): Promise<Observable<CountMessage>>{
-    await this.cacheManager.set('cached_count', this.cachedItem, 15)
-    return await this.cacheManager.get('cached_count')
+  // cria um observable que emite um valor a cada 5 segundos
+  private cachedItem = interval(5000).pipe(map(num => ({ data: `numero: ${num}` })))
+
+  sendCount(): Promise<Observable<CountMessage>> {
+    // retorna o observable do cache
+    return this.cacheManager.get('cached_count')
   }
 }

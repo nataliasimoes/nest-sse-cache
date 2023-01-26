@@ -8,10 +8,10 @@ interface CountMessage {
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Get()
-  async getHello() {
-    return this.appService.getHello();
-  }
+  // @Get()
+  // async getHello() {
+  //   return this.appService.getHello();
+  // }
 
   @Sse('count')
   async sendCount(){
